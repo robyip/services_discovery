@@ -1,0 +1,8 @@
+name: nhse
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - bs4
+  - requests
