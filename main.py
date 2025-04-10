@@ -16,6 +16,7 @@ from typing import List
 # when is the service open
 # cost
 
+# From the live well directory found here  https://www.thelivewelldirectory.com/Search?CategoryId=122&SM=ServiceSearch&SME=True (Origina url shared by Simon)
 
 BASE_URL = "https://www.thelivewelldirectory.com"
 SEARCH_URL = f"{BASE_URL}/Search?CategoryId=122"
@@ -58,6 +59,8 @@ for service_link in soup_searched_page.find_all("a", class_="service-name bem-se
     # get Website link
     dt_elements = service_page_soup.find_all("dt", class_="bem-description-list__title")
     for dt in dt_elements:
+        if dt.text == "Service Type:":
+           service.service_type = dt.find_next("dd").text.strip()
         if dt.text == "Website:":
            service.website = dt.find_next("dd").find("a")["href"]
         if dt.text == "Group:":
@@ -68,17 +71,11 @@ for service_link in soup_searched_page.find_all("a", class_="service-name bem-se
                service.age_groups.append(grp.text.strip())    
 
 
-    services.append(service)   
+    services.append(service)
+    print(service)   
     # break
     
-print(services)
+# print(services)
 
     
-# print(soup.prettify())
 
-# links = soup.find("a", class_="service-name bem-search-result-item__title bem-title bem-title--m")
-
-# print(links)
-
-
-# <a class="service-name bem-search-result-item__title bem-title bem-title--m" href="/Services/471" itemprop="url">Healthwatch Liverpool</a>
