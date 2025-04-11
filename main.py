@@ -35,7 +35,7 @@ class Service:
     website: str = field(default="")
     groups_for: List[str] = field(default_factory=list)
     age_groups: List[str] = field(default_factory=list)
-    areas_of_city: str = field(default="")
+    areas_of_city: List[str] = field(default_factory=list)
     access_service: str = field(default="")
     who_can_refer: str = field(default="")
     service_open: str = field(default="")
@@ -64,15 +64,25 @@ for service_link in soup_searched_page.find_all("a", class_="service-name bem-se
         if dt.text == "Website:":
            service.website = dt.find_next("dd").find("a")["href"]
         if dt.text == "Group:":
-           for grp in dt.find_next("dd").find_all("li"):
-               service.groups_for.append(grp.text.strip())
+            for grp in dt.find_next("dd").find_all("li"):
+                service.groups_for.append(grp.text.strip())
         if dt.text == "Age Range:":
-           for grp in dt.find_next("dd").find_all("li"):
-               service.age_groups.append(grp.text.strip())    
+            for grp in dt.find_next("dd").find_all("li"):
+                service.age_groups.append(grp.text.strip())  
+        # Areas of the city   
+        if dt.text == "What areas of the city is this for?:":
+            for grp in dt.find_next("dd").find_all("li"):
+                service.areas_of_city.append(grp.text.strip())
+        elif dt.text == "Service available in these areas":
+            for grp in dt.find_next("dd").find_all("li"):
+                service.areas_of_city.append(grp.text.strip())
+                
 
 
     services.append(service)
-    print(service)   
+    print(service)
+    if service_link.get_text(strip=True) == "The Vision & Vision 4 You":
+        exit()
     # break
     
 # print(services)
